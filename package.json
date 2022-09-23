@@ -1,0 +1,23 @@
+{
+  "name": "ukiyo",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epapathom/ukiyo-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/epapathom/ukiyo-api/issues"
+  },
+  "homepage": "https://github.com/epapathom/ukiyo-api#readme",
+  "dependencies": {
+    "serverless-deployment-bucket": "^1.6.0",
+    "serverless-offline": "^10.2.0",
+    "serverless-prune-plugin": "^2.0.1"
+  }
+}

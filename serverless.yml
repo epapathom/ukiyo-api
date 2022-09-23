@@ -1,0 +1,59 @@
+service: ukiyo-api
+
+provider:
+  name: aws
+  runtime: go1.x
+  region: eu-central-1
+  stage: ${opt:stage}
+  deploymentBucket:
+    name: epapathom-serverless
+    serverSideEncryption: AES256
+  environment:
+    STAGE: ${opt:stage}
+    GIN_MODE: release
+    SERVER_URL: ":3000"
+    VPC_ID: ${file(.env.yml):VPC_ID}
+    VPC_PRIVATE_SUBNET_A_ID: ${file(.env.yml):VPC_PRIVATE_SUBNET_A_ID}
+    VPC_PRIVATE_SUBNET_B_ID: ${file(.env.yml):VPC_PRIVATE_SUBNET_B_ID}
+    VPC_PRIVATE_SUBNET_C_ID: ${file(.env.yml):VPC_PRIVATE_SUBNET_C_ID}
+  vpc:
+    securityGroupIds:
+      - Ref: UkiyoAPISecurityGroup
+    subnetIds:
+      - ${self:provider.environment.VPC_PRIVATE_SUBNET_A_ID}
+      - ${self:provider.environment.VPC_PRIVATE_SUBNET_B_ID}
+      - ${self:provider.environment.VPC_PRIVATE_SUBNET_C_ID}
+
+resources:
+  Resources:
+    UkiyoAPISecurityGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties: 
+        GroupName: ukiyo-api-lambda-sg-${opt:stage}
+        GroupDescription: Allow all outbound traffic, but no inbound.
+        SecurityGroupIngress:
+          - IpProtocol: -1
+            CidrIp: 127.0.0.1/32
+        VpcId: ${self:provider.environment.VPC_ID}
+
+functions:
+  UkiyoAPI:
+    handler: ukiyo
+    memorySize: 128
+    timeout: 30
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
+
+custom:
+  deploymentBucket:
+    blockPublicAccess: true
+  pythonRequirements:
+    dockerizePip: non-linux
+  prune:
+    automatic: true
+    number: 3
+
+plugins:
+  - serverless-deployment-bucket
+  - serverless-prune-plugin
