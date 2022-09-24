@@ -9,6 +9,8 @@ type Logic struct {
 	storer Storer
 }
 
+var LogicSingleton *Logic
+
 func (l *Logic) GetPaintingsByArtist(artist string) []models.Painting {
 	var paintings []models.Painting
 

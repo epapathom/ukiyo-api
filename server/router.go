@@ -13,7 +13,7 @@ func GetRouter() *gin.Engine {
 	paintingController := new(controllers.PaintingController)
 
 	router.GET("/", healthController.Status)
-	router.GET("/paintings/:artist", paintingController.GetPaintingsByArtist)
+	router.GET("/paintings", paintingController.GetPaintingsByArtist)
 
 	return router
 }

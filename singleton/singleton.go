@@ -3,6 +3,7 @@ package singleton
 import (
 	"sync"
 	"ukiyo/adapters"
+	"ukiyo/business"
 	"ukiyo/configuration"
 )
 
@@ -18,5 +19,7 @@ func (s *Singleton) Init() {
 
 			adapters.DynamoDBSingleton = new(adapters.DynamoDB)
 			adapters.DynamoDBSingleton.Init()
+
+			business.LogicSingleton = new(business.Logic)
 		})
 }

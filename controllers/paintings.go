@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"ukiyo/bindings"
 	"ukiyo/business"
 
 	"github.com/gin-gonic/gin"
@@ -11,15 +10,14 @@ import (
 type PaintingController struct{}
 
 func (p PaintingController) GetPaintingsByArtist(c *gin.Context) {
-	var paintingsPathParameters bindings.PaintingsPathParameters
+	var paintingsQueryParameters PaintingsQueryParameters
 
-	if err := c.ShouldBindUri(&paintingsPathParameters); err != nil {
+	if err := c.ShouldBind(&paintingsQueryParameters); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err})
 		return
 	}
 
-	logic := new(business.Logic)
-	painting := logic.GetPaintingsByArtist(paintingsPathParameters.Artist)
+	painting := business.LogicSingleton.GetPaintingsByArtist(paintingsQueryParameters.Artist)
 
 	c.IndentedJSON(http.StatusOK, painting)
 }
