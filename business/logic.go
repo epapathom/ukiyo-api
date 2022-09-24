@@ -5,17 +5,13 @@ import (
 	"ukiyo/models"
 )
 
-func GetPaintingByName(name string, language string) models.Painting {
+func GetPaintingsByArtist(artist string) []models.Painting {
 	var storer Storer
-	var painting models.Painting
+	var paintings []models.Painting
 
 	storer = config.DynamoDBSingleton
 
-	if language == "japanese" {
-		painting = storer.GetPaintingByName(name, "")
-	} else if language == "english" {
-		painting = storer.GetPaintingByName("", name)
-	}
+	paintings = storer.GetPaintingsByArtist(artist)
 
-	return painting
+	return paintings
 }

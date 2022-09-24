@@ -10,6 +10,7 @@ provider:
     serverSideEncryption: AES256
   environment:
     STAGE: ${opt:stage}
+    APPLICATION_MODE: Lambda
     GIN_MODE: release
     SERVER_URL: ":3000"
     VPC_ID: ${file(.env.yml):VPC_ID}
@@ -23,6 +24,14 @@ provider:
       - ${self:provider.environment.VPC_PRIVATE_SUBNET_A_ID}
       - ${self:provider.environment.VPC_PRIVATE_SUBNET_B_ID}
       - ${self:provider.environment.VPC_PRIVATE_SUBNET_C_ID}
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - dynamodb:Scan
+          Resource:
+            - Ref: PaintingsTable
 
 resources:
   Resources:
@@ -35,6 +44,17 @@ resources:
           - IpProtocol: -1
             CidrIp: 127.0.0.1/32
         VpcId: ${self:provider.environment.VPC_ID}
+    PaintingsTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+          TableName: Paintings
+          AttributeDefinitions:
+            - AttributeName: id
+              AttributeType: S
+          KeySchema:
+            - AttributeName: id
+              KeyType: HASH
+          BillingMode: PAY_PER_REQUEST
 
 functions:
   UkiyoAPI:
@@ -42,8 +62,12 @@ functions:
     memorySize: 128
     timeout: 30
     events:
-      - http: ANY /
-      - http: ANY /{proxy+}
+      - http: 
+          path: ANY /
+          private: true
+      - http: 
+          path: ANY /{proxy+}
+          private: true
 
 custom:
   deploymentBucket:

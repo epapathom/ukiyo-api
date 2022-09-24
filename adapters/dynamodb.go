@@ -25,34 +25,27 @@ func (ddb *DynamoDB) Init() {
 	ddb.Client = dynamodb.NewFromConfig(config)
 }
 
-func (ddb *DynamoDB) GetPaintingByName(japaneseName string, englishName string) models.Painting {
-	var key map[string]types.AttributeValue
-	var painting models.Painting
+func (ddb *DynamoDB) GetPaintingsByArtist(artist string) []models.Painting {
+	var paintings []models.Painting
 
-	if japaneseName != "" {
-		key = map[string]types.AttributeValue{
-			"NameJapanese": &types.AttributeValueMemberS{Value: japaneseName},
-		}
-	} else if englishName != "" {
-		key = map[string]types.AttributeValue{
-			"NameEnglish": &types.AttributeValueMemberS{Value: englishName},
-		}
+	expression := map[string]types.AttributeValue{
+		"Artist": &types.AttributeValueMemberS{Value: artist},
 	}
 
-	getItemInput := &dynamodb.GetItemInput{
-		Key:       key,
-		TableName: aws.String("Paintings"),
+	scanInput := &dynamodb.ScanInput{
+		TableName:                 aws.String("Paintings"),
+		ExpressionAttributeValues: expression,
 	}
 
-	output, err := ddb.Client.GetItem(context.TODO(), getItemInput)
+	output, err := ddb.Client.Scan(context.TODO(), scanInput)
 	if err != nil {
 		log.Fatalf("unable to get video game, %v", err)
 	}
 
-	err = attributevalue.UnmarshalMap(output.Item, &painting)
+	err = attributevalue.UnmarshalListOfMaps(output.Items, &paintings)
 	if err != nil {
 		log.Fatalf("unable to unmarshal map, %v", err)
 	}
 
-	return painting
+	return paintings
 }

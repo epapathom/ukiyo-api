@@ -14,7 +14,7 @@ func GetRouter() *gin.Engine {
 	paintingController := new(controllers.PaintingController)
 
 	router.GET(utils.AddStageToPath("/"), healthController.Status)
-	router.GET(utils.AddStageToPath("/painting/:name/:language"), paintingController.GetPaintingByName)
+	router.GET(utils.AddStageToPath("/paintings/:artist"), paintingController.GetPaintingsByArtist)
 
 	return router
 }

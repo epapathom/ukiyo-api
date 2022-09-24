@@ -21,7 +21,7 @@ func (s *Server) Handler(ctx context.Context, req events.APIGatewayProxyRequest)
 func (s *Server) Init() {
 	router := GetRouter()
 
-	if os.Getenv("GIN_MODE") == "release" {
+	if os.Getenv("APPLICATION_MODE") == "Lambda" {
 		ginLambda = ginadapter.New(router)
 		lambda.Start(s.Handler)
 	} else {
