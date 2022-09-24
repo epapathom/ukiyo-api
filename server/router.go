@@ -2,7 +2,6 @@ package server
 
 import (
 	"ukiyo/controllers"
-	"ukiyo/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,8 +12,8 @@ func GetRouter() *gin.Engine {
 	healthController := new(controllers.HealthController)
 	paintingController := new(controllers.PaintingController)
 
-	router.GET(utils.AddStageToPath("/"), healthController.Status)
-	router.GET(utils.AddStageToPath("/paintings/:artist"), paintingController.GetPaintingsByArtist)
+	router.GET("/", healthController.Status)
+	router.GET("/paintings/:artist", paintingController.GetPaintingsByArtist)
 
 	return router
 }

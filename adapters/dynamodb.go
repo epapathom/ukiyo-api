@@ -2,6 +2,7 @@ package adapters
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"ukiyo/models"
 
@@ -13,33 +14,40 @@ import (
 )
 
 type DynamoDB struct {
-	Client *dynamodb.Client
+	Client    *dynamodb.Client
+	TableName string
 }
 
-func (ddb *DynamoDB) Init() {
-	config, err := config.LoadDefaultConfig(context.TODO())
+func (ddb *DynamoDB) Init(stage string) {
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}
 
-	ddb.Client = dynamodb.NewFromConfig(config)
+	ddb.Client = dynamodb.NewFromConfig(cfg)
+	ddb.TableName = fmt.Sprintf("Paintings-%s", stage)
 }
 
 func (ddb *DynamoDB) GetPaintingsByArtist(artist string) []models.Painting {
 	var paintings []models.Painting
 
-	expression := map[string]types.AttributeValue{
-		"Artist": &types.AttributeValueMemberS{Value: artist},
+	tableName := aws.String(ddb.TableName)
+
+	filterExpression := aws.String("contains(Artist, :Artist)")
+
+	expressionAttributeValues := map[string]types.AttributeValue{
+		":Artist": &types.AttributeValueMemberS{Value: artist},
 	}
 
 	scanInput := &dynamodb.ScanInput{
-		TableName:                 aws.String("Paintings"),
-		ExpressionAttributeValues: expression,
+		TableName:                 tableName,
+		FilterExpression:          filterExpression,
+		ExpressionAttributeValues: expressionAttributeValues,
 	}
 
 	output, err := ddb.Client.Scan(context.TODO(), scanInput)
 	if err != nil {
-		log.Fatalf("unable to get video game, %v", err)
+		log.Fatalf("unable to get paintings, %v", err)
 	}
 
 	err = attributevalue.UnmarshalListOfMaps(output.Items, &paintings)

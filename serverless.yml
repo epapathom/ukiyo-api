@@ -13,10 +13,10 @@ provider:
     APPLICATION_MODE: Lambda
     GIN_MODE: release
     SERVER_URL: ":3000"
-    VPC_ID: ${file(.env.yml):VPC_ID}
-    VPC_PRIVATE_SUBNET_A_ID: ${file(.env.yml):VPC_PRIVATE_SUBNET_A_ID}
-    VPC_PRIVATE_SUBNET_B_ID: ${file(.env.yml):VPC_PRIVATE_SUBNET_B_ID}
-    VPC_PRIVATE_SUBNET_C_ID: ${file(.env.yml):VPC_PRIVATE_SUBNET_C_ID}
+    VPC_ID: ${file(env.yml):VPC_ID}
+    VPC_PRIVATE_SUBNET_A_ID: ${file(env.yml):VPC_PRIVATE_SUBNET_A_ID}
+    VPC_PRIVATE_SUBNET_B_ID: ${file(env.yml):VPC_PRIVATE_SUBNET_B_ID}
+    VPC_PRIVATE_SUBNET_C_ID: ${file(env.yml):VPC_PRIVATE_SUBNET_C_ID}
   vpc:
     securityGroupIds:
       - Ref: UkiyoAPISecurityGroup
@@ -30,8 +30,10 @@ provider:
         - Effect: "Allow"
           Action:
             - dynamodb:Scan
+            - dynamodb:Query
+            - dynamodb:ConditionCheckItem
           Resource:
-            - Ref: PaintingsTable
+            - Fn::GetAtt: [PaintingsTable, Arn]
 
 resources:
   Resources:
@@ -47,12 +49,12 @@ resources:
     PaintingsTable:
         Type: AWS::DynamoDB::Table
         Properties:
-          TableName: Paintings
+          TableName: Paintings-${opt:stage}
           AttributeDefinitions:
-            - AttributeName: id
+            - AttributeName: Id
               AttributeType: S
           KeySchema:
-            - AttributeName: id
+            - AttributeName: Id
               KeyType: HASH
           BillingMode: PAY_PER_REQUEST
 
@@ -62,12 +64,14 @@ functions:
     memorySize: 128
     timeout: 30
     events:
-      - http: 
-          path: ANY /
-          private: true
-      - http: 
-          path: ANY /{proxy+}
-          private: true
+      - http: ANY /
+      - http: ANY /{proxy+}
+
+package:
+  exclude:
+    - ./**
+  include:
+    - ./ukiyo
 
 custom:
   deploymentBucket:

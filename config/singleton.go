@@ -13,19 +13,12 @@ var ConfigSingleton *Config
 var DynamoDBSingleton *adapters.DynamoDB
 
 func (s *Singleton) Init() {
-	if ConfigSingleton == nil {
-		once.Do(
-			func() {
-				ConfigSingleton = new(Config)
-				ConfigSingleton.Init()
-			})
-	}
+	once.Do(
+		func() {
+			ConfigSingleton = new(Config)
+			ConfigSingleton.Init()
 
-	if DynamoDBSingleton == nil {
-		once.Do(
-			func() {
-				DynamoDBSingleton = new(adapters.DynamoDB)
-				DynamoDBSingleton.Init()
-			})
-	}
+			DynamoDBSingleton = new(adapters.DynamoDB)
+			DynamoDBSingleton.Init(ConfigSingleton.Stage)
+		})
 }
