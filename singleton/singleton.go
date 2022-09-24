@@ -13,7 +13,10 @@ var once sync.Once
 func (s *Singleton) Init() {
 	once.Do(
 		func() {
+			configuration.ConfigurationSingleton = new(configuration.Configuration)
 			configuration.ConfigurationSingleton.Init()
+
+			adapters.DynamoDBSingleton = new(adapters.DynamoDB)
 			adapters.DynamoDBSingleton.Init()
 		})
 }

@@ -51,10 +51,10 @@ resources:
         Properties:
           TableName: Paintings-${opt:stage}
           AttributeDefinitions:
-            - AttributeName: Id
+            - AttributeName: PaintingId
               AttributeType: S
           KeySchema:
-            - AttributeName: Id
+            - AttributeName: PaintingId
               KeyType: HASH
           BillingMode: PAY_PER_REQUEST
 
