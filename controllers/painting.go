@@ -18,7 +18,8 @@ func (p PaintingController) GetPaintingsByArtist(c *gin.Context) {
 		return
 	}
 
-	painting := business.GetPaintingsByArtist(paintingsPathParameters.Artist)
+	logic := new(business.Logic)
+	painting := logic.GetPaintingsByArtist(paintingsPathParameters.Artist)
 
 	c.IndentedJSON(http.StatusOK, painting)
 }

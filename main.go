@@ -1,12 +1,12 @@
 package main
 
 import (
-	"ukiyo/config"
 	"ukiyo/server"
+	"ukiyo/singleton"
 )
 
 func main() {
-	singleton := new(config.Singleton)
+	singleton := new(singleton.Singleton)
 	singleton.Init()
 
 	server := new(server.Server)

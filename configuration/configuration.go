@@ -1,17 +1,19 @@
-package config
+package configuration
 
 import (
 	"os"
 )
 
-type Config struct {
+type Configuration struct {
 	Stage  string
 	Server struct {
 		Url string
 	}
 }
 
-func (c *Config) Init() {
+var ConfigurationSingleton *Configuration
+
+func (c *Configuration) Init() {
 	if os.Getenv("STAGE") != "" {
 		c.Stage = os.Getenv("STAGE")
 	} else {

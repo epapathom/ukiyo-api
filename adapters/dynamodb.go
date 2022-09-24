@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"ukiyo/configuration"
 	"ukiyo/models"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -18,14 +19,16 @@ type DynamoDB struct {
 	TableName string
 }
 
-func (ddb *DynamoDB) Init(stage string) {
+var DynamoDBSingleton *DynamoDB
+
+func (ddb *DynamoDB) Init() {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}
 
 	ddb.Client = dynamodb.NewFromConfig(cfg)
-	ddb.TableName = fmt.Sprintf("Paintings-%s", stage)
+	ddb.TableName = fmt.Sprintf("Paintings-%s", configuration.ConfigurationSingleton.Stage)
 }
 
 func (ddb *DynamoDB) GetPaintingsByArtist(artist string) []models.Painting {

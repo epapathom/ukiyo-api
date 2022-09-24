@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"os"
-	"ukiyo/config"
+	"ukiyo/configuration"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -25,6 +25,6 @@ func (s *Server) Init() {
 		ginLambda = ginadapter.New(router)
 		lambda.Start(s.Handler)
 	} else {
-		router.Run(config.ConfigSingleton.Server.Url)
+		router.Run(configuration.ConfigurationSingleton.Server.Url)
 	}
 }

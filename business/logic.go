@@ -1,17 +1,20 @@
 package business
 
 import (
-	"ukiyo/config"
+	"ukiyo/adapters"
 	"ukiyo/models"
 )
 
-func GetPaintingsByArtist(artist string) []models.Painting {
-	var storer Storer
+type Logic struct {
+	storer Storer
+}
+
+func (l *Logic) GetPaintingsByArtist(artist string) []models.Painting {
 	var paintings []models.Painting
 
-	storer = config.DynamoDBSingleton
+	l.storer = adapters.DynamoDBSingleton
 
-	paintings = storer.GetPaintingsByArtist(artist)
+	paintings = l.storer.GetPaintingsByArtist(artist)
 
 	return paintings
 }
