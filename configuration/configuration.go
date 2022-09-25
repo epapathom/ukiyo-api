@@ -17,7 +17,7 @@ func (c *Configuration) Init() {
 	if os.Getenv("STAGE") != "" {
 		c.Stage = os.Getenv("STAGE")
 	} else {
-		c.Stage = ""
+		c.Stage = "dev"
 	}
 
 	if os.Getenv("SERVER_URL") != "" {
