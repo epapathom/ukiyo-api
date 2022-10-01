@@ -23,7 +23,7 @@ go build
 ./ukiyo
 ```
 
-The service will be accessible in the **localhost** of the device and to port **3000**. The default stage that will be used to connect to AWS resources is the **dev** stage. Therefore, in order to connect the API to the AWS resources, we also need to deploy the **dev** stage on AWS.
+The service will be accessible in the **localhost** of the device and to port **3000**. The default stage that will be used to connect to the AWS resources is the **dev** stage. Therefore, in order to connect the API to the AWS resources, we also need to deploy the **dev** stage on AWS.
 
 ### AWS
 
@@ -33,13 +33,13 @@ To deploy the service on AWS, first of all, we need build the service for the me
 GOARCH=amd64 GOOS=linux go build
 ```
 
-Then, we need to create a **env.yml** file and insert the required environment variables in the **env.dist.yml** file. Finally, we can deploy the service to a stage using the following commands.
+Then, we need to create an **env.yml** file and insert the required environment variables in the **env.dist.yml** file. Finally, we can deploy the service to a stage using the following commands.
 
 ```
-sls deploy -s <STAGE> # e.g.: sls deploy -s v1
+sls deploy -s <STAGE> # e.g. sls deploy -s v1
 ```
 
-If we omit the **-s** or **--stage** flag, the default stage that will be used by the serverless framework is the **dev** stage. The service will be accessible in the URL found in *API Gateway > Stage > <STAGE>*.
+If we omit the **-s** or **--stage** flag, the default stage that will be used by the serverless framework is the **dev** stage. The service will be accessible in the URL found in API Gateway > Stage.
 
 ## Debugging
 

@@ -8,4 +8,4 @@ The Ukiyo API is an API developed in Go and the Gin framework to store and retri
 
 # Get Started
 
-For more information regarding on how to get started with the API, visit the [Get Started](/documentation/get_started.md) guide in the documentation.
+For more information on how to get started with the API, visit the [Get Started](/documentation/get_started.md) guide in the documentation.
