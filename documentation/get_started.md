@@ -1,6 +1,6 @@
 # Get Started
 
-This guide thoroughly describes the deployment steps to deploy Ukiyo API to a local environment and to AWS. It also provides a way to debug the API locally while utilizing AWS resources.
+This guide thoroughly describes the deployment steps to deploy Ukiyo API to a local environment and to AWS. It also provides a way to generate the Swagger docs and debug the API locally while utilizing AWS resources.
 
 ## Deployment
 
@@ -40,6 +40,14 @@ sls deploy -s <STAGE> # e.g. sls deploy -s v1
 ```
 
 If we omit the **-s** or **--stage** flag, the default stage that will be used by the serverless framework is the **dev** stage. The service will be accessible in the URL found in API Gateway > Stage.
+
+## OpenAPI Docs
+
+To generate the OpenAPI docs, install [swaggo/swag](https://github.com/swaggo/swag) run the following command.
+
+```
+swag init
+```
 
 ## Debugging
 
