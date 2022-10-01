@@ -1,0 +1,84 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "An API to store and retrieve Ukiyo-e paintings.",
+        "title": "Ukiyo API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/dev",
+    "paths": {
+        "/paintings": {
+            "get": {
+                "description": "Get paintings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "paintings"
+                ],
+                "summary": "Get paintings",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search by artist",
+                        "name": "artist",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Painting"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Painting": {
+            "type": "object",
+            "properties": {
+                "artist": {
+                    "type": "string"
+                },
+                "english_name": {
+                    "type": "string"
+                },
+                "japanese_name": {
+                    "type": "string"
+                },
+                "painting_id": {
+                    "type": "string"
+                },
+                "s3_key": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

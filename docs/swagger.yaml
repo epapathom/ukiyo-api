@@ -1,0 +1,55 @@
+basePath: /dev
+definitions:
+  models.Painting:
+    properties:
+      artist:
+        type: string
+      english_name:
+        type: string
+      japanese_name:
+        type: string
+      painting_id:
+        type: string
+      s3_key:
+        type: string
+      year:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: An API to store and retrieve Ukiyo-e paintings.
+  title: Ukiyo API
+  version: "1.0"
+paths:
+  /paintings:
+    get:
+      consumes:
+      - application/json
+      description: Get paintings
+      parameters:
+      - description: Search by artist
+        in: query
+        name: artist
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Painting'
+            type: array
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get paintings
+      tags:
+      - paintings
+swagger: "2.0"
