@@ -1,6 +1,6 @@
 # Get Started
 
-This guide thoroughly describes the deployment steps to deploy Ukiyo API to a local environment and to AWS. It also provides a way to generate the Swagger docs and debug the API locally while utilizing AWS resources.
+This guide thoroughly describes the deployment steps to deploy Ukiyo API to a local environment and to AWS. It also provides a way to generate the OpenAPI docs and debug the API locally while utilizing AWS resources.
 
 ## Deployment
 
